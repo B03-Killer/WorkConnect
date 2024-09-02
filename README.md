@@ -16,7 +16,7 @@
 
 [WorkConnect 이동하기](https://work-connect-plum.vercel.app/)
 
-[Storybook 이동하기](https://66c3904f6e0476eb4df0516b-juqaubooaa.chromatic.com/?path=/docs/components-bottomlinetextfield--docs)
+[Storybook 이동하기](https://work-connect-plum-storybook.vercel.app/)
 
 ## 👥 팀원소개
 
