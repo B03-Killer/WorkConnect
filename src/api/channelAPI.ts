@@ -76,7 +76,7 @@ class ChannelAPI {
   };
 
   updateChannelActiveAt = async (channelId: number): Promise<void> => {
-    const { data } = await this.axios.get(`/api/channel/${channelId}/update-active-at`);
+    const { data } = await this.axios.put(`/api/channel/${channelId}/update-active-at`);
 
     return data.data;
   };

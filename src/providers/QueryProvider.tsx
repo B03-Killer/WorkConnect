@@ -16,7 +16,7 @@ const QueryProvider = ({ children }: StrictPropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {/* <ReactQueryDevtools /> */}
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 };

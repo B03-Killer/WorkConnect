@@ -8,10 +8,10 @@ import { updateChannelActiveAt } from '@/services/channel';
 import { getServerCookie } from '@/utils/cookie/serverUtils';
 
 /**
- * Channel update read at GET 요청 핸들러
+ * Channel update read at PUT 요청 핸들러
  * @description 채널 아이디를 받아서 채널에 접속한 시간을 기록 합니다.
  */
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const PUT = async (req: NextRequest, { params }: { params: { id: string } }) => {
   const { id } = params;
   const workspaceUserId = getServerCookie('workspaceUserId');
 

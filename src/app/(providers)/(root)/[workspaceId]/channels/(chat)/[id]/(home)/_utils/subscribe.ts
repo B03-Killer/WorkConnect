@@ -4,14 +4,17 @@ import createRealtimeChannel from '@/utils/createRealtimeChannel';
 type SubscribeToChatProps = {
   handleMessagesUpdates: (payload: any) => void;
   handleUserInfoUpdates: () => void;
-  id: number;
   userIds: string;
 };
 
+/**
+ * @function handleSubscribeToChat
+ * @description
+ * filter 옵션을 사용하면 DELETE 이벤트를 감지하지 못하는 이슈로 인해 filter를 주석처리함
+ */
 export const handleSubscribeToChat = ({
   handleMessagesUpdates,
   handleUserInfoUpdates,
-  id,
   userIds
 }: SubscribeToChatProps) => {
   return createRealtimeChannel({
@@ -21,7 +24,7 @@ export const handleSubscribeToChat = ({
         event: '*',
         schema: 'public',
         table: 'chat',
-        filter: `channel_id=eq.${id}`,
+        //filter: `channel_id=eq.${id}`,
         handler: handleMessagesUpdates
       },
       {
@@ -35,6 +38,11 @@ export const handleSubscribeToChat = ({
   });
 };
 
+/**
+ * @function handleSubscribeToNotice
+ * @description
+ * filter 옵션을 사용하면 DELETE 이벤트를 감지하지 못하는 이슈로 인해 filter를 주석처리함
+ */
 export const handleSubscribeToNotice = ({ handler, id }: { handler: (payload: any) => void; id: number }) => {
   return createRealtimeChannel({
     channelName: REALTIME_CHANNEL_NAME.CHAT_FOR_NOTICE,
@@ -43,7 +51,7 @@ export const handleSubscribeToNotice = ({ handler, id }: { handler: (payload: an
         event: '*',
         schema: 'public',
         table: 'chat',
-        filter: `channel_id=eq.${id}`,
+        //filter: `channel_id=eq.${id}`,
         handler
       }
     ]

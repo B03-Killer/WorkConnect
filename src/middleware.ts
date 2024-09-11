@@ -2,15 +2,32 @@ import { type NextRequest } from 'next/server';
 import { updateSession } from './utils/middleware/supabaseMiddleware';
 import { redirectToChannel } from './utils/middleware/redirectToChannel';
 
-export async function middleware(request: NextRequest) {
-  let response = await updateSession(request);
-
-  const channelRedirectResponse = await redirectToChannel(request);
-  if (channelRedirectResponse) {
-    return channelRedirectResponse;
+async function handleSessionUpdate(request: NextRequest) {
+  try {
+    return await updateSession(request);
+  } catch (error) {
+    console.error('Error updating session:', error);
+    return new Response('Error updating session', { status: 500 });
   }
+}
 
-  return response;
+async function handleChannelRedirect(request: NextRequest) {
+  try {
+    const redirectResponse = await redirectToChannel(request);
+
+    if (redirectResponse) {
+      return redirectResponse;
+    }
+  } catch (error) {
+    console.error('Error redirecting to channel:', error);
+    return new Response('Error redirecting to channel', { status: 500 });
+  }
+}
+
+export async function middleware(request: NextRequest) {
+  const sessionUpdateResponse = await handleSessionUpdate(request);
+  const channelRedirectResponse = await handleChannelRedirect(request);
+  return channelRedirectResponse || sessionUpdateResponse;
 }
 
 export const config = {

@@ -7,7 +7,9 @@ import type { ContextMenuContextType } from '../../_provider/ContextMenuProvider
 import ChatImage from '../../../../_components/ChatImage';
 import ChatVideo from '../../../../_components/ChatVideo';
 import useLongPress from '@/hooks/useLongPress';
-import { ChatFile, ChatText, ChatNotice } from './Components';
+import ChatFile from './ChatFile';
+import ChatText from './ChatText';
+import ChatNotice from '../ChatNotice';
 
 type HandleContextMenuEventProps = React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLVideoElement>;
 
@@ -22,15 +24,35 @@ type ChatMessageProps = {
 
 const DATA_TARGET = 'message';
 
-const getStyles = (isMe: boolean) => ({
-  margin: isMe ? '' : 'ml-[40px] mt-[6px]',
-  rounded: isMe ? 'rounded-br-none' : 'rounded-tl-none',
-  background: isMe ? 'bg-[#EBECFE]' : 'bg-grey50',
-  select: 'prevent-select'
-});
+const componentsMap: Record<string, (props: any) => JSX.Element> = {
+  [CHAT_TYPE.image]: (props: any) => <ChatImage {...props} />,
+  [CHAT_TYPE.document]: (props: any) => <ChatFile {...props} />,
+  [CHAT_TYPE.video]: (props: any) => <ChatVideo {...props} />,
+  [CHAT_TYPE.text]: (props: any) => <ChatText {...props} />,
+  [CHAT_TYPE.notice]: (props: any) => <ChatNotice {...props} />
+};
+
+const getStyles = (type: string, isMe: boolean) => {
+  const baseStyles = {
+    margin: isMe ? '' : 'ml-[40px] mt-[6px]',
+    rounded: isMe ? 'rounded-br-none' : 'rounded-tl-none',
+    background: isMe ? 'bg-[#EBECFE]' : 'bg-grey50',
+    select: 'prevent-select'
+  };
+
+  const additionalStyles: Record<string, string> = {
+    [CHAT_TYPE.image]: 'rounded-lg w-[200px] h-auto',
+    [CHAT_TYPE.document]: '',
+    [CHAT_TYPE.video]: 'rounded-lg',
+    [CHAT_TYPE.text]: clsx(baseStyles.background, baseStyles.rounded),
+    [CHAT_TYPE.notice]: baseStyles.rounded
+  };
+
+  return clsx(baseStyles.margin, baseStyles.select, additionalStyles[type]);
+};
 
 export const ChatMessage = memo(({ content, type, isMe, id, noticeUrl, openContextMenu }: ChatMessageProps) => {
-  const { margin, rounded, background, select } = useMemo(() => getStyles(isMe), [isMe]);
+  const className = useMemo(() => getStyles(type, isMe), [type, isMe]);
 
   const handleContextMenu = useCallback(
     (event: React.TouchEvent | HandleContextMenuEventProps) => {
@@ -46,72 +68,23 @@ export const ChatMessage = memo(({ content, type, isMe, id, noticeUrl, openConte
 
   const { onTouchStart, onTouchEnd } = useLongPress(handleContextMenu);
 
-  switch (type) {
-    case CHAT_TYPE.image:
-      return (
-        <ChatImage
-          src={content}
-          className={clsx('rounded-lg w-[200px] h-auto', margin, select)}
-          width={300}
-          height={300}
-          data-target={DATA_TARGET}
-          onContextMenu={handleContextMenu}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        />
-      );
-    case CHAT_TYPE.document:
-      return (
-        <ChatFile
-          fileUrl={content}
-          fileName={content.split('/').pop() || ''}
-          className={clsx(margin, select)}
-          data-target={DATA_TARGET}
-          onContextMenu={handleContextMenu}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        />
-      );
-    case CHAT_TYPE.video:
-      return (
-        <ChatVideo
-          src={content}
-          className={clsx('rounded-lg', margin, select)}
-          width={200}
-          controls
-          data-target={DATA_TARGET}
-          onContextMenu={handleContextMenu}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        />
-      );
-    case CHAT_TYPE.text:
-      return (
-        <ChatText
-          className={clsx(background, margin, rounded, select)}
-          data-target={DATA_TARGET}
-          onContextMenu={handleContextMenu}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        >
-          {content}
-        </ChatText>
-      );
+  const Component = componentsMap[type];
+  if (!Component) return null;
 
-    case CHAT_TYPE.notice:
-      return (
-        <ChatNotice
-          noticeUrl={noticeUrl}
-          className={clsx(margin, rounded, select)}
-          data-target={DATA_TARGET}
-          onContextMenu={handleContextMenu}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        >
-          {content}
-        </ChatNotice>
-      );
-    default:
-      return null;
-  }
+  const commonProps = {
+    'data-target': DATA_TARGET,
+    onContextMenu: handleContextMenu,
+    onTouchStart,
+    onTouchEnd
+  };
+
+  const componentProps: Record<string, any> = {
+    [CHAT_TYPE.text]: { ...commonProps, children: content },
+    [CHAT_TYPE.notice]: { ...commonProps, children: content, src: noticeUrl },
+    [CHAT_TYPE.image]: { ...commonProps, src: content, width: 300, height: 300 },
+    [CHAT_TYPE.document]: { ...commonProps, src: content },
+    [CHAT_TYPE.video]: { ...commonProps, src: content, width: 200, controls: true }
+  };
+
+  return <Component {...componentProps[type]} className={className} />;
 });

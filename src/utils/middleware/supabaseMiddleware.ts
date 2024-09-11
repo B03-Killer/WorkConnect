@@ -3,10 +3,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { handleAuthRedirect } from './handleAuthRedirect';
 
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request
-  });
-
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -17,10 +13,7 @@ export async function updateSession(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value));
-          supabaseResponse = NextResponse.next({
-            request
-          });
-          cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options));
+          responseWithUpdatedCookies(cookiesToSet, request);
         }
       }
     }
@@ -36,5 +29,13 @@ export async function updateSession(request: NextRequest) {
     return authRedirectResponse;
   }
 
-  return supabaseResponse;
+  return NextResponse.next({ request });
 }
+
+const responseWithUpdatedCookies = (
+  cookiesToSet: Array<{ name: string; value: string; options?: any }>,
+  request: NextRequest
+) => {
+  const response = NextResponse.next({ request });
+  cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+};
