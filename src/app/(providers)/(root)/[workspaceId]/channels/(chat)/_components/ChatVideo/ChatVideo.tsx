@@ -17,6 +17,9 @@ type ChatVideoProps = {
 const ChatVideo = ({ src = '', className, width, height, ref, ...props }: ChatVideoProps) => {
   const [hasError, setHasError] = useState(false);
 
+  /**
+   * 이 자체로도 좋지만, 썸네일을 넣어주는 것도 좋을 것 같습니다.
+   */
   if (!src) return null;
   if (hasError) {
     return (
