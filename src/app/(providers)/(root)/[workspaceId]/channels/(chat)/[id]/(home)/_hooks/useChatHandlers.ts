@@ -1,9 +1,12 @@
 import { GetChatMessageType } from '@/types/chat';
 import { RealtimeSubscribeProps } from '@/utils/createRealtimeChannel';
-import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
-import { QUERY_KEYS } from '../../../_constants/constants';
 import { useMutationUpdateChannelActiveAt } from '../../../_hook/useChatMutation';
+import {
+  useInvalidateChatMessages,
+  useInvalidateLatestNotice,
+  useInvalidateUsersInChannel
+} from '../../../_hook/useChatQuery';
 
 type RealtimePayloadMessagesType = GetChatMessageType & {
   channel_id: string;
@@ -22,9 +25,11 @@ type HandleChatUpdatesProps = {
 };
 
 export const useChatHandlers = () => {
-  const queryClient = useQueryClient();
-  const [payloadMessages, setPayloadMessages] = useState<RealtimePayloadMessagesType[]>([]);
+  const { invalidate: invalidateUsersInChannel } = useInvalidateUsersInChannel();
+  const { invalidate: invalidateChatMessages } = useInvalidateChatMessages();
+  const { invalidate: invalidateLatestNotice } = useInvalidateLatestNotice();
   const { mutateAsync: updateChannelActiveAt } = useMutationUpdateChannelActiveAt();
+  const [payloadMessages, setPayloadMessages] = useState<RealtimePayloadMessagesType[]>([]);
 
   const handleMessagesUpdates = useCallback(({ channelId }: HandleChatUpdatesProps) => {
     return async (payload: RealtimeChatPayloadType) => {
@@ -34,10 +39,10 @@ export const useChatHandlers = () => {
         case 'INSERT':
           setPayloadMessages((prev) => [...prev, newPayload]);
           await updateChannelActiveAt(channelId);
-          await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS_IN_CHANNEL(Number(channelId)) });
+          await invalidateUsersInChannel(channelId);
           break;
         case 'DELETE':
-          queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CHAT_MESSAGES(Number(channelId)) });
+          invalidateChatMessages(channelId);
           setPayloadMessages([]);
           break;
       }
@@ -52,14 +57,14 @@ export const useChatHandlers = () => {
       const isNoticeUpdated = newPayload.type === 'notice';
 
       if (isNoticeDeleted || isNoticeUpdated) {
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LATEST_NOTICE(channelId) });
+        invalidateLatestNotice(channelId);
       }
     };
   }, []);
 
   const handleUserInfoUpdates = useCallback(({ channelId }: HandleChatUpdatesProps) => {
     return () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USERS_IN_CHANNEL(Number(channelId)) });
+      invalidateUsersInChannel(channelId);
     };
   }, []);
 

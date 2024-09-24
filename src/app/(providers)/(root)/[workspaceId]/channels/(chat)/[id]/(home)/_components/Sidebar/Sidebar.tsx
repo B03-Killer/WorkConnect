@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Typography from '@/components/Typography';
-import ChatMemberList from '../ChatMemberList';
-import SidebarMenuList from '../SidebarMenuList';
+import ChannelUsers from './ChannelUsers';
+import ChannelMenu from './ChannelMenu';
 
 type SidebarProps = {
   isOpenSidebar: boolean;
@@ -20,8 +20,8 @@ const Sidebar = ({ isOpenSidebar, handleOpenSidebar, channelName }: SidebarProps
       >
         <div className="flex flex-col">
           <ChannelName channelName={channelName} />
-          <ChatMemberList />
-          <SidebarMenuList />
+          <ChannelUsers />
+          <ChannelMenu />
         </div>
       </aside>
       <div

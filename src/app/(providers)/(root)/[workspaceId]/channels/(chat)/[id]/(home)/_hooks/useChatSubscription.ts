@@ -1,21 +1,27 @@
 import { useEffect } from 'react';
-import { useGetUsersInChannel } from '../../../_hook/useChatQuery';
+import { useGetLatestNotice, useGetUsersInChannel } from '../../../_hook/useChatQuery';
 import { useChatHandlers } from './useChatHandlers';
-import { handleSubscribeToChat } from '../_utils/subscribe';
+import { handleSubscribeToChat, handleSubscribeToNotice } from '../_utils/subscribe';
 import { GetUsersInChannelResponse } from '@/types/channel';
 import { isEmpty } from '@/utils/isEmpty';
 
 type UseChatSubscriptionProps = {
   channelId: number;
   usersInChannel: GetUsersInChannelResponse;
-  isPendingUsersInChannel: boolean;
+  isPending: boolean;
+  latestNoticeId?: number;
 };
 
-const useChatSubscription = ({ channelId, usersInChannel, isPendingUsersInChannel }: UseChatSubscriptionProps) => {
-  const { handleMessagesUpdates, handleUserInfoUpdates, payloadMessages } = useChatHandlers();
+const useChatSubscription = ({ channelId, usersInChannel, isPending, latestNoticeId }: UseChatSubscriptionProps) => {
+  const {
+    handleMessagesUpdates,
+    handleUserInfoUpdates,
+    payloadMessages,
+    handleNoticeUpdates: handleUpdates
+  } = useChatHandlers();
 
   useEffect(() => {
-    if (!channelId || isPendingUsersInChannel || isEmpty(usersInChannel)) return;
+    if (!channelId || isPending || isEmpty(usersInChannel)) return;
 
     const channel = handleSubscribeToChat({
       handleMessagesUpdates: handleMessagesUpdates({ channelId }),
@@ -26,7 +32,20 @@ const useChatSubscription = ({ channelId, usersInChannel, isPendingUsersInChanne
     return () => {
       channel.unsubscribe();
     };
-  }, [channelId, isPendingUsersInChannel, usersInChannel]);
+  }, [channelId, isPending, usersInChannel]);
+
+  useEffect(() => {
+    if (!channelId) return;
+
+    const channel = handleSubscribeToNotice({
+      handler: handleUpdates({ latestNoticeId, channelId }),
+      id: channelId
+    }).subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [channelId, latestNoticeId]);
 
   return { payloadMessages };
 };

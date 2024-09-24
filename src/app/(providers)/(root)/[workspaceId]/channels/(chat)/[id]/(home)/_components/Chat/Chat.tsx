@@ -3,13 +3,13 @@
 import { memo, useCallback, useMemo, type ComponentProps } from 'react';
 import { CHAT_TYPE } from '@/constants/chat';
 import clsx from 'clsx';
-import type { ContextMenuContextType } from '../../_provider/ContextMenuProvider';
 import ChatImage from '../../../../_components/ChatImage';
 import ChatVideo from '../../../../_components/ChatVideo';
 import useLongPress from '@/hooks/useLongPress';
 import ChatFile from './ChatFile';
 import ChatText from './ChatText';
-import ChatNotice from '../ChatNotice';
+import ChatNotice from './ChatNotice';
+import { MenuStoreType } from '@/store/chatContextMenuStore';
 
 type HandleContextMenuEventProps = React.MouseEvent<HTMLDivElement | HTMLButtonElement | HTMLVideoElement>;
 
@@ -19,7 +19,7 @@ type ChatMessageProps = {
   isMe: boolean;
   id: number;
   noticeUrl: string;
-  openContextMenu: ContextMenuContextType['openContextMenu'];
+  openMenu: MenuStoreType['openMenu'];
 };
 
 const DATA_TARGET = 'message';
@@ -51,7 +51,7 @@ const getStyles = (type: string, isMe: boolean) => {
   return clsx(baseStyles.margin, baseStyles.select, additionalStyles[type]);
 };
 
-export const ChatMessage = memo(({ content, type, isMe, id, noticeUrl, openContextMenu }: ChatMessageProps) => {
+const Chat = memo(({ content, type, isMe, id, noticeUrl, openMenu }: ChatMessageProps) => {
   const className = useMemo(() => getStyles(type, isMe), [type, isMe]);
 
   const handleContextMenu = useCallback(
@@ -61,9 +61,9 @@ export const ChatMessage = memo(({ content, type, isMe, id, noticeUrl, openConte
       const targetElement = (event.target as HTMLElement)?.closest('[data-target="message"]')?.getBoundingClientRect();
       if (!targetElement) return;
 
-      openContextMenu({ targetElement, id, type, text: content, isMe });
+      openMenu({ targetElement, id, type, text: content, isMe });
     },
-    [openContextMenu, id, type, content, isMe]
+    [openMenu, id, type, content, isMe]
   );
 
   const { onTouchStart, onTouchEnd } = useLongPress(handleContextMenu);
@@ -88,3 +88,5 @@ export const ChatMessage = memo(({ content, type, isMe, id, noticeUrl, openConte
 
   return <Component {...componentProps[type]} className={className} />;
 });
+
+export default Chat;
