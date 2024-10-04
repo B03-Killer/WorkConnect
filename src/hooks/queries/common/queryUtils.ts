@@ -10,4 +10,6 @@ export const getPrefetchQuery = async <TData = unknown, TError = unknown>(
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
 };

@@ -1,9 +1,8 @@
-import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import { useGetPrefetchChannelInfo } from '@/hooks/queries/useChannels';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 const ChatDetailPage = async ({ params: { id } }: { params: { id: string } }) => {
-  await queryClient.prefetchQuery(getChannelInfoOptions(Number(id)));
+  const queryClient = await useGetPrefetchChannelInfo(Number(id));
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

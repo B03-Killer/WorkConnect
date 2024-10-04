@@ -39,5 +39,5 @@ export const useGetChannelNotices = (channelId: number) => useGetQuery(QUERY_OPT
 export const useGetUsersInChannel = (channelId: number) => useGetQuery(QUERY_OPTIONS.getUsers(channelId));
 
 export const useGetPrefetchChannelInfo = async (id: number) => {
-  await getPrefetchQuery(QUERY_OPTIONS.getInfo(id));
+  return await getPrefetchQuery(QUERY_OPTIONS.getInfo(id));
 };
