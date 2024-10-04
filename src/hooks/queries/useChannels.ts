@@ -1,8 +1,7 @@
 import api from '@/api';
 import { GetUsersInChannelResponse } from '@/types/channel';
 import { CHANNEL_QUERY_KEYS } from '@/constants/queryKeys';
-import { createQueryOptions } from './common';
-import getQuery from './common/getQuery';
+import { createQueryOptions, getPrefetchQuery, useGetQuery } from './common';
 
 const QUERY_OPTIONS = {
   getUsers: (channelId: number) =>
@@ -33,8 +32,12 @@ const QUERY_OPTIONS = {
     })
 };
 
-export const useGetChannelInfo = (id: number) => getQuery(QUERY_OPTIONS.getInfo(id));
-export const useGetChannelDocuments = (channelId: number) => getQuery(QUERY_OPTIONS.getDocuments(channelId));
-export const useGetChannelMedia = (channelId: number) => getQuery(QUERY_OPTIONS.getMedia(channelId));
-export const useGetChannelNotices = (channelId: number) => getQuery(QUERY_OPTIONS.getNotices(channelId));
-export const useGetUsersInChannel = (channelId: number) => getQuery(QUERY_OPTIONS.getUsers(channelId));
+export const useGetChannelInfo = (id: number) => useGetQuery(QUERY_OPTIONS.getInfo(id));
+export const useGetChannelDocuments = (channelId: number) => useGetQuery(QUERY_OPTIONS.getDocuments(channelId));
+export const useGetChannelMedia = (channelId: number) => useGetQuery(QUERY_OPTIONS.getMedia(channelId));
+export const useGetChannelNotices = (channelId: number) => useGetQuery(QUERY_OPTIONS.getNotices(channelId));
+export const useGetUsersInChannel = (channelId: number) => useGetQuery(QUERY_OPTIONS.getUsers(channelId));
+
+export const useGetPrefetchChannelInfo = async (id: number) => {
+  await getPrefetchQuery(QUERY_OPTIONS.getInfo(id));
+};
