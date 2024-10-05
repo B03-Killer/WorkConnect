@@ -29,22 +29,29 @@ const styleMap: any = {
   }
 };
 
-const ChatItem = ({ isMe, hasRead, createdAt, src, userName, href, type, content }: any) => {
+// TODO: onContextMenu 추가
+const ChatItem = ({ isMe, hasRead, createdAt, type, noticeUrl, content, otherProfileProps, onContextMenu }: any) => {
   const Content = componentsMap[type];
 
   if (isMe) {
     return (
       <MeChat hasRead={hasRead} createdAt={createdAt}>
-        <Content data-target="message" content={content} className={clsx('prevent-select', styleMap.me[type])} />
+        <Content
+          data-target="message"
+          content={content}
+          noticeUrl={noticeUrl}
+          className={clsx('prevent-select', styleMap.me[type])}
+        />
       </MeChat>
     );
   }
 
   return (
-    <OtherChat href={href} src={src} userName={userName} createdAt={createdAt}>
+    <OtherChat createdAt={createdAt} {...otherProfileProps}>
       <Content
         data-target="message"
         content={content}
+        noticeUrl={noticeUrl}
         className={clsx('ml-[40px] mt-[6px]', 'prevent-select', styleMap.other[type])}
       />
     </OtherChat>

@@ -17,11 +17,11 @@ const Chats = ({ data = [], onContextMenu, lastActiveAt }: any) => {
         isMe={isMe}
         hasRead={hasRead ?? false}
         createdAt={chat.created_at}
-        src={chat.src}
-        userName={chat.userName}
-        href={chat.href}
         type={chat.type}
         content={chat.content}
+        onContextMenu={onContextMenu}
+        otherProfileProps={otherProfileProps}
+        noticeUrl={noticeUrl}
       />
     );
   });

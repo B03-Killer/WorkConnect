@@ -38,8 +38,8 @@ const useChatMessageList = () => {
       const profileUrl = `/${workspaceId}/profile/${chat.workspace_user_id}`;
       const otherProfileProps = userInfo
         ? {
-            profileImage: userInfo.profile_image,
-            name: userInfo.name,
+            src: userInfo.profile_image,
+            userName: userInfo.name,
             href: profileUrl
           }
         : undefined;
