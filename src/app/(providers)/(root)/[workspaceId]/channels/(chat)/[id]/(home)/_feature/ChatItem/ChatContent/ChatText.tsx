@@ -2,7 +2,7 @@ import Typography from '@/components/Typography';
 import clsx from 'clsx';
 import type { ChatTextProps } from './types';
 
-const ChatText = ({ children, className, color: _color, ...props }: ChatTextProps) => {
+const ChatText = ({ content, className, color: _color, ...props }: ChatTextProps) => {
   return (
     <Typography
       variant="Body14px"
@@ -13,7 +13,7 @@ const ChatText = ({ children, className, color: _color, ...props }: ChatTextProp
       color="grey700Black"
       {...props}
     >
-      {children}
+      {content}
     </Typography>
   );
 };

@@ -10,10 +10,11 @@ const Wrapper = ({ className, children }: { className?: string; children: React.
   return <div className={clsx('flex items-end gap-2 justify-end', className)}>{children}</div>;
 };
 
+//TODO: href 왜 없지?
 const Profile = ({ href, src, userName }: ProfileProps) => {
   return (
     <div className="inline-flex items-center gap-2 w-full">
-      <Link href={href}>
+      <Link href={href || '/'}>
         <Avatar src={src ?? undefined} size="32px" />
       </Link>
       <Typography variant="Title16px" color="grey900">
