@@ -30,7 +30,6 @@ const styleMap: any = {
   }
 };
 
-// TODO: onContextMenu 추가
 const ChatItem = ({
   isMe,
   hasRead,
