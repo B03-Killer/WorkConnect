@@ -2,6 +2,7 @@ import api from '@/api';
 import { GetUsersInChannelResponse } from '@/types/channel';
 import { CHANNEL_QUERY_KEYS } from '@/constants/queryKeys';
 import { createQueryOptions, getPrefetchQuery, useGetQuery } from './common';
+import { GetChatMessageType } from '@/types/chat';
 
 const QUERY_OPTIONS = {
   getUsers: (channelId: number) =>
@@ -26,7 +27,7 @@ const QUERY_OPTIONS = {
       fn: () => api.chat.getChannelMedia(channelId)
     }),
   getNotices: (channelId: number) =>
-    createQueryOptions<any>({
+    createQueryOptions<GetChatMessageType[]>({
       key: CHANNEL_QUERY_KEYS.CHANNEL_NOTICES(channelId),
       fn: () => api.chat.getChannelNotices(channelId)
     })

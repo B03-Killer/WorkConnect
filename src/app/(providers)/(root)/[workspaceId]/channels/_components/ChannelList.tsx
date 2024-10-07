@@ -9,8 +9,8 @@ import clsx from 'clsx';
 import { handleSubscribeToChannels } from '../_utils/subscribe';
 import { useGetChannels } from '../_hooks/useChannelQuery';
 import ChannelItem from './ChannelItem';
-import useGetParamsChannelId from '../(chat)/_hook/useGetParamsChannelId';
 import { useChannelHandlers } from '../_hooks/useChannelHandlers';
+import useGetParamsChannelId from '../chats/_hook/useGetParamsChannelId';
 
 type ChannelListPageProps = {
   className?: string;

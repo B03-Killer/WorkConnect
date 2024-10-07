@@ -14,6 +14,7 @@ const Chats = ({ data = [], onContextMenu, lastActiveAt }: any) => {
     return (
       <ChatItem
         key={chat.id}
+        id={chat.id}
         isMe={isMe}
         hasRead={hasRead ?? false}
         createdAt={chat.created_at}

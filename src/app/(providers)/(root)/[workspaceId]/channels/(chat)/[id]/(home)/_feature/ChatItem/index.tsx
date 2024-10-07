@@ -3,13 +3,14 @@ import MeChat from './MeChat';
 import OtherChat from './OtherChat';
 import { ChatImage, ChatFile, ChatVideo, ChatText, ChatNotice } from './ChatContent';
 import clsx from 'clsx';
+import { useCallback } from 'react';
 
 const componentsMap: any = {
-  [CHAT_TYPE.image]: (props: any) => <ChatImage {...props} />,
-  [CHAT_TYPE.document]: (props: any) => <ChatFile {...props} />,
-  [CHAT_TYPE.video]: (props: any) => <ChatVideo {...props} />,
-  [CHAT_TYPE.text]: (props: any) => <ChatText {...props} />,
-  [CHAT_TYPE.notice]: (props: any) => <ChatNotice {...props} />
+  [CHAT_TYPE.image]: ({ noticeUrl, ...props }: any) => <ChatImage {...props} />,
+  [CHAT_TYPE.document]: ({ noticeUrl, ...props }: any) => <ChatFile {...props} />,
+  [CHAT_TYPE.video]: ({ noticeUrl, ...props }: any) => <ChatVideo {...props} />,
+  [CHAT_TYPE.text]: ({ noticeUrl, ...props }: any) => <ChatText {...props} />,
+  [CHAT_TYPE.notice]: ({ noticeUrl, ...props }: any) => <ChatNotice {...props} noticeUrl={noticeUrl} />
 };
 
 const styleMap: any = {
@@ -30,8 +31,25 @@ const styleMap: any = {
 };
 
 // TODO: onContextMenu 추가
-const ChatItem = ({ isMe, hasRead, createdAt, type, noticeUrl, content, otherProfileProps, onContextMenu }: any) => {
+const ChatItem = ({
+  isMe,
+  hasRead,
+  createdAt,
+  type,
+  noticeUrl,
+  content,
+  otherProfileProps,
+  onContextMenu,
+  id
+}: any) => {
   const Content = componentsMap[type];
+
+  const handleContextMenu = useCallback(
+    (event: React.TouchEvent) => {
+      onContextMenu?.({ event, type, content, id, isMe });
+    },
+    [id]
+  );
 
   if (isMe) {
     return (
@@ -41,6 +59,7 @@ const ChatItem = ({ isMe, hasRead, createdAt, type, noticeUrl, content, otherPro
           content={content}
           noticeUrl={noticeUrl}
           className={clsx('prevent-select', styleMap.me[type])}
+          onContextMenu={handleContextMenu}
         />
       </MeChat>
     );
@@ -53,6 +72,7 @@ const ChatItem = ({ isMe, hasRead, createdAt, type, noticeUrl, content, otherPro
         content={content}
         noticeUrl={noticeUrl}
         className={clsx('ml-[40px] mt-[6px]', 'prevent-select', styleMap.other[type])}
+        onContextMenu={handleContextMenu}
       />
     </OtherChat>
   );

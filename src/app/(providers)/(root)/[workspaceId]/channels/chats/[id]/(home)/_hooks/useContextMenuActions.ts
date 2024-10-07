@@ -28,17 +28,17 @@ export const useContextMenuActions = () => {
   }, [menu.id]);
 
   const copyText = useCallback(() => {
-    window.navigator.clipboard.writeText(menu.text || '').then(() => {
+    window.navigator.clipboard.writeText(menu.content || '').then(() => {
       openSnackBar({ message: '복사가 완료되었어요' });
     });
 
     closeMenu();
-  }, [menu.text]);
+  }, [menu.content]);
 
   const handleNotice = useCallback(() => {
-    mutateChatMessage({ content: menu.text || '', type: CHAT_TYPE.notice });
+    mutateChatMessage({ content: menu.content || '', type: CHAT_TYPE.notice });
     closeMenu();
-  }, [menu.text]);
+  }, [menu.content]);
 
   return { menu, closeMenu, copyText, deleteChat, handleNotice };
 };

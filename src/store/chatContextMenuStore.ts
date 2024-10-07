@@ -11,28 +11,38 @@ export type MenuType = {
   id: number | null;
   type: string | null;
   position: { y: number; isAtTop: boolean };
-  text: string | null;
+  content: string | null;
   isMe: boolean;
 };
 
 export type MenuStoreType = {
-  openMenu: (props: OpenMenuProps) => void;
+  openMenu: (props: OpenMenuProps2) => void;
   closeMenu: () => void;
   menu: MenuType;
 };
+
+type OpenMenuProps2 = {
+  event: React.TouchEvent;
+} & Pick<MenuType, 'type' | 'content' | 'id' | 'isMe'>;
 
 const defaultMenu: MenuType = {
   isOpen: false,
   id: null,
   type: null,
   position: { y: 0, isAtTop: false },
-  text: null,
+  content: null,
   isMe: false
 };
 
 const useChatContextMenuStore = create<MenuStoreType>((set) => ({
   menu: defaultMenu,
-  openMenu: ({ targetElement: { bottom, top }, ...props }: OpenMenuProps) => {
+  openMenu: ({ event, ...props }: OpenMenuProps2) => {
+    event.preventDefault?.();
+
+    const { bottom, top } = (event.target as HTMLElement)
+      ?.closest('[data-target="message"]')
+      ?.getBoundingClientRect() ?? { bottom: 0, top: 0 };
+
     const adjustedBottom = bottom - TOP_BAR_HEIGHT;
     const adjustedTop = top - TOP_BAR_HEIGHT;
     const isAtTop = window.innerHeight - adjustedBottom >= 250;
