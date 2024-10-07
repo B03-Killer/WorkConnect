@@ -1,7 +1,7 @@
 import useFileUpload from '../../_hooks/useFileUpload';
 import { STORAGE_BUCKET_NAME } from '../../../../_constants/constants';
 import { useMutationChatMessage } from '../../../../_hook/useChatMutation';
-import useGetParamsChannelId from '../../../../_hook/useGetParamsChannelId';
+import useGetParamsChannelId from '../../../../../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 import { useState } from 'react';
 import Textarea, { type HandleKeyDownProps, type HandleSubmitProps } from '../../_components/MessageSender/Textarea';
 import { ContextMenu, UtilsMenu } from '../../_components/MessageSender';

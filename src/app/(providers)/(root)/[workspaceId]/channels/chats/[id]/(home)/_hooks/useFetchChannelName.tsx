@@ -1,5 +1,5 @@
 import { useGetChannelInfo } from '../../../_hook/useChatQuery';
-import useGetParamsChannelId from '../../../_hook/useGetParamsChannelId';
+import useGetParamsChannelId from '../../../../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 
 export const useFetchChannelInfos = () => {
   const channelId = useGetParamsChannelId();

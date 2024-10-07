@@ -1,13 +1,14 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useGetChatMessages, useGetUsersInChannel } from '../../../_hook/useChatQuery';
-import useChatSubscription from './useChatSubscription';
-import { getChannelLastActiveTime } from '../../../../(chat)/[id]/(home)/_utils/getChannelLastActiveTime';
-import useChatNotice from './useChatNotice';
-import useGetParamsChannelId from '../../../../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 import useWorkspaceId from '@/hooks/useWorkspaceId';
 import { useWorkspaceUserId } from '@/hooks/useWorkspaceUserId';
+import useGetParamsChannelId from './useGetParamsChannelId';
+import { useGetUsersInChannel } from '@/hooks/queries/useChannels';
+import { useGetChatMessages } from '@/hooks/queries/useChat';
+import { getChannelLastActiveTime } from '../_utils/getChannelLastActiveTime';
+import useChatSubscription from './useChatSubscription';
+import useChatNotice from './useChatNotice';
 
 const useChatMessageList = () => {
   const channelId = useGetParamsChannelId();
@@ -16,10 +17,7 @@ const useChatMessageList = () => {
 
   const { noticeUrl, latestNotice } = useChatNotice();
   const { data: usersInChannel = {}, isPending } = useGetUsersInChannel(Number(channelId));
-
-  const { data: chatMessages = [] } = useGetChatMessages({
-    channel_id: Number(channelId)
-  });
+  const { data: chatMessages = [] } = useGetChatMessages(Number(channelId));
 
   const { payloadMessages } = useChatSubscription({
     channelId,

@@ -5,7 +5,7 @@ import { isEmpty } from '@/utils/isEmpty';
 import { useEffect, useRef } from 'react';
 import { useMutationUpdateChannelActiveAt } from '../../../../../chats/_hook/useChatMutation';
 import useChatMessageList from '../../../../../chats/[id]/(home)/_hooks/useChatMessageList';
-import useGetParamsChannelId from '../../../../../chats/_hook/useGetParamsChannelId';
+import useGetParamsChannelId from '../../_hooks/useGetParamsChannelId';
 import Chats from './Chats';
 import useChatContextMenuStore from '@/store/chatContextMenuStore';
 

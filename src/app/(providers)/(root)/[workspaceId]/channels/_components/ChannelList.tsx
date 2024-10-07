@@ -10,7 +10,7 @@ import { handleSubscribeToChannels } from '../_utils/subscribe';
 import { useGetChannels } from '../_hooks/useChannelQuery';
 import ChannelItem from './ChannelItem';
 import { useChannelHandlers } from '../_hooks/useChannelHandlers';
-import useGetParamsChannelId from '../chats/_hook/useGetParamsChannelId';
+import useGetParamsChannelId from '../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 
 type ChannelListPageProps = {
   className?: string;

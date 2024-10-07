@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useGetLatestNotice, useGetUsersInChannel } from '../../../_hook/useChatQuery';
 import { useChatHandlers } from './useChatHandlers';
-import { handleSubscribeToChat, handleSubscribeToNotice } from '../_utils/subscribe';
+import { handleSubscribeToChat, handleSubscribeToNotice } from '../../../../(chat)/[id]/(home)/_utils/subscribe';
 import { GetUsersInChannelResponse } from '@/types/channel';
 import { isEmpty } from '@/utils/isEmpty';
 

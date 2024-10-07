@@ -7,7 +7,7 @@ import { useMutationUpdateChannelActiveAt } from '../../../../_hook/useChatMutat
 import { useGetUsersInChannel } from '../../../../_hook/useChatQuery';
 
 import useChatMessageList from '../../_hooks/useChatMessageList';
-import useGetParamsChannelId from '../../../../_hook/useGetParamsChannelId';
+import useGetParamsChannelId from '../../../../../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 import { Chats } from '@/components/Chats';
 
 const ChatModule = () => {
