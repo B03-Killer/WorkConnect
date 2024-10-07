@@ -14,7 +14,7 @@ const QUERY_OPTIONS = {
     createQueryOptions<any>({
       key: CHANNEL_QUERY_KEYS.CHANNEL_INFO(id),
       fn: () => api.channel.getChannelInfo(id),
-      selectFn: (data) => data[0]
+      select: (data) => data[0]
     }),
   getDocuments: (channelId: number) =>
     createQueryOptions<any>({

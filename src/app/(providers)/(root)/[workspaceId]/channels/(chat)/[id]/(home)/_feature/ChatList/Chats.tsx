@@ -1,13 +1,15 @@
 import dayjs, { type Dayjs } from 'dayjs';
 import ChatItem from '../ChatItem';
+import { MenuStoreType } from '@/store/chatContextMenuStore';
+import { ChatMessageListReturnTypes } from '../../_hooks/useChatMessageList';
 
-// type ChatsProps = {
-//   data: Omit<ChatProps, 'hasRead'>[];
-//   onContextMenu: ChatProps['onContextMenu'];
-//   lastActiveAt: Dayjs | null;
-// };
+type ChatsProps = {
+  data: ChatMessageListReturnTypes[];
+  onContextMenu: MenuStoreType['openMenu'];
+  lastActiveAt: Dayjs | null;
+};
 
-const Chats = ({ data = [], onContextMenu, lastActiveAt }: any) => {
+const Chats = ({ data = [], onContextMenu, lastActiveAt }: ChatsProps) => {
   return data.map(({ chat, isMe, noticeUrl, otherProfileProps }: any) => {
     const hasRead = isMe && lastActiveAt?.isAfter(dayjs(chat.created_at));
 

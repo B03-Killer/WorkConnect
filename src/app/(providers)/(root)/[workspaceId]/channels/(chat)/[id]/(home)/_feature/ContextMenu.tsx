@@ -1,15 +1,13 @@
 'use client';
 
 import Typography from '@/components/Typography';
-import CopyIcon from '@/icons/Copy.svg';
-import HashIcon from '@/icons/Hash.svg';
-import TrashIcon from '@/icons/Trash.svg';
 import { CHAT_TYPE } from '@/constants/chat';
 import clsx from 'clsx';
-import { useContextMenuActions } from '../../_hooks/useContextMenuActions';
+import { useChatContextMenu } from '../_hooks/useChatContextMenu';
+import { CopyIcon, HashIcon, TrashIcon } from '@/icons';
 
 const ContextMenu = () => {
-  const { menu, closeMenu, copyText, deleteChat, handleNotice } = useContextMenuActions();
+  const { menu, closeMenu, copyText, deleteChat, handleNotice } = useChatContextMenu();
   const { isOpen, position, type, isMe } = menu;
 
   if (!isOpen) return null;

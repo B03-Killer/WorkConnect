@@ -3,11 +3,11 @@
 import { useGetUsersInChannel } from '@/hooks/queries/useChannels';
 import { isEmpty } from '@/utils/isEmpty';
 import { useEffect, useRef } from 'react';
-import { useMutationUpdateChannelActiveAt } from '../../../../../chats/_hook/useChatMutation';
-import useChatMessageList from '../../../../../chats/[id]/(home)/_hooks/useChatMessageList';
+import useChatMessageList from '../../_hooks/useChatMessageList';
 import useGetParamsChannelId from '../../_hooks/useGetParamsChannelId';
 import Chats from './Chats';
-import useChatContextMenuStore from '@/store/chatContextMenuStore';
+import useChatContextMenuStore, { OpenMenuProps2 } from '@/store/chatContextMenuStore';
+import { useUpdateActiveAt } from '@/hooks/queries/useChat';
 
 const ChatList = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,7 +17,7 @@ const ChatList = () => {
   const { chatMessageList, lastActiveAt } = useChatMessageList();
 
   const { data: usersInChannel = {} } = useGetUsersInChannel(Number(channelId));
-  const { mutate: updateChannelActiveAt } = useMutationUpdateChannelActiveAt();
+  const { mutate: updateChannelActiveAt } = useUpdateActiveAt();
 
   useEffect(() => {
     if (!channelId) return;
@@ -37,7 +37,7 @@ const ChatList = () => {
           <Chats
             data={chatMessageList}
             lastActiveAt={lastActiveAt}
-            onContextMenu={({ event, type, content, id, isMe }: any) =>
+            onContextMenu={({ event, type, content, id, isMe }: OpenMenuProps2) =>
               openMenu({
                 event,
                 type,

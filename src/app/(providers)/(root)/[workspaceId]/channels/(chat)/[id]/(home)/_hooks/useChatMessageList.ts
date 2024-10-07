@@ -9,6 +9,18 @@ import { useGetChatMessages } from '@/hooks/queries/useChat';
 import { getChannelLastActiveTime } from '../_utils/getChannelLastActiveTime';
 import useChatSubscription from './useChatSubscription';
 import useChatNotice from './useChatNotice';
+import type { GetChatMessageType } from '@/types/chat';
+
+export type ChatMessageListReturnTypes = {
+  chat: GetChatMessageType;
+  otherProfileProps?: {
+    src: string | null;
+    userName: string;
+    href: string;
+  };
+  noticeUrl: string;
+  isMe: boolean;
+};
 
 const useChatMessageList = () => {
   const channelId = useGetParamsChannelId();

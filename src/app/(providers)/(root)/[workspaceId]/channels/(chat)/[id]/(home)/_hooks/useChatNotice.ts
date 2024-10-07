@@ -1,13 +1,13 @@
 'use client';
 
 import useWorkspaceId from '@/hooks/useWorkspaceId';
-import { useGetLatestNotice } from '../../../_hook/useChatQuery';
-import useGetParamsChannelId from '../../../_hook/useGetParamsChannelId';
+import useGetParamsChannelId from './useGetParamsChannelId';
+import { useGetLatestNotice } from '@/hooks/queries/useChat';
 
 const useChatNotice = () => {
   const channelId = useGetParamsChannelId();
   const workspaceId = useWorkspaceId();
-  const { data: latestNotice } = useGetLatestNotice({ id: channelId });
+  const { data: latestNotice } = useGetLatestNotice(channelId);
 
   const noticeUrl = `/${workspaceId}/channels/${channelId}/notice`;
 

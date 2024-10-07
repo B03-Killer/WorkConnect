@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import { useMutationUpdateChannelActiveAt } from '../../../../_hook/useChatMutation';
 import { useGetUsersInChannel } from '../../../../_hook/useChatQuery';
 
-import useChatMessageList from '../../_hooks/useChatMessageList';
+import useChatMessageList from '../../../../../(chat)/[id]/(home)/_hooks/useChatMessageList';
 import useGetParamsChannelId from '../../../../../(chat)/[id]/(home)/_hooks/useGetParamsChannelId';
 import { Chats } from '@/components/Chats';
 

@@ -21,7 +21,7 @@ export type MenuStoreType = {
   menu: MenuType;
 };
 
-type OpenMenuProps2 = {
+export type OpenMenuProps2 = {
   event: React.TouchEvent;
 } & Pick<MenuType, 'type' | 'content' | 'id' | 'isMe'>;
 

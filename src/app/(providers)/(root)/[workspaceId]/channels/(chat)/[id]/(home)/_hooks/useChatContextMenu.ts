@@ -1,11 +1,11 @@
 import { useSnackBar } from '@/providers/SnackBarContext';
 import { useParams } from 'next/navigation';
 import { CHAT_TYPE } from '@/constants/chat';
-import { useMutationChatMessage, useMutationDeleteChatMessage } from '../../../_hook/useChatMutation';
+import { useMutationChatMessage, useMutationDeleteChatMessage } from '../../../../chats/_hook/useChatMutation';
 import { useCallback } from 'react';
 import useChatContextMenuStore from '@/store/chatContextMenuStore';
 
-export const useContextMenuActions = () => {
+export const useChatContextMenu = () => {
   const { id } = useParams();
   const { menu, closeMenu } = useChatContextMenuStore();
   const { openSnackBar } = useSnackBar();

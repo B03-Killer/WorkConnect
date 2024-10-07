@@ -4,6 +4,9 @@ import OtherChat from './OtherChat';
 import { ChatImage, ChatFile, ChatVideo, ChatText, ChatNotice } from './ChatContent';
 import clsx from 'clsx';
 import { useCallback } from 'react';
+import { ChatMessageListReturnTypes } from '../../_hooks/useChatMessageList';
+import { MenuStoreType } from '@/store/chatContextMenuStore';
+import { Dayjs } from 'dayjs';
 
 const componentsMap: any = {
   [CHAT_TYPE.image]: ({ noticeUrl, ...props }: any) => <ChatImage {...props} />,
@@ -30,6 +33,18 @@ const styleMap: any = {
   }
 };
 
+type ChatItemProps = {
+  onContextMenu: MenuStoreType['openMenu'];
+  hasRead: boolean;
+  createdAt: ChatMessageListReturnTypes['chat']['created_at'];
+  type: ChatMessageListReturnTypes['chat']['type'];
+  noticeUrl: ChatMessageListReturnTypes['noticeUrl'];
+  content: ChatMessageListReturnTypes['chat']['content'];
+  otherProfileProps: ChatMessageListReturnTypes['otherProfileProps'];
+  isMe: ChatMessageListReturnTypes['isMe'];
+  id: ChatMessageListReturnTypes['chat']['id'];
+};
+
 const ChatItem = ({
   isMe,
   hasRead,
@@ -40,7 +55,7 @@ const ChatItem = ({
   otherProfileProps,
   onContextMenu,
   id
-}: any) => {
+}: ChatItemProps) => {
   const Content = componentsMap[type];
 
   const handleContextMenu = useCallback(
@@ -63,6 +78,8 @@ const ChatItem = ({
       </MeChat>
     );
   }
+
+  if (!otherProfileProps) return null;
 
   return (
     <OtherChat createdAt={createdAt} {...otherProfileProps}>
