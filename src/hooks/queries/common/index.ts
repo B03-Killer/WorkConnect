@@ -1,3 +1,3 @@
 export * from './createQueryOptions';
-export * from './getInvalidate';
+export * from './createQueryInvalidate';
 export * from './queryUtils';

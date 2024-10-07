@@ -1,7 +1,7 @@
 import api from '@/api';
 import { GetUsersInChannelResponse } from '@/types/channel';
 import { CHANNEL_QUERY_KEYS } from '@/constants/queryKeys';
-import { createQueryOptions, getPrefetchQuery, useGetQuery } from './common';
+import { createQueryInvalidate, createQueryOptions, getPrefetchQuery, useGetQuery } from './common';
 import { GetChatMessageType } from '@/types/chat';
 
 const QUERY_OPTIONS = {
@@ -41,4 +41,7 @@ export const useGetUsersInChannel = (channelId: number) => useGetQuery(QUERY_OPT
 
 export const useGetPrefetchChannelInfo = async (id: number) => {
   return await getPrefetchQuery(QUERY_OPTIONS.getInfo(id));
+};
+export const useInvalidateUsersInChannel = () => {
+  return (channelId: number) => createQueryInvalidate(CHANNEL_QUERY_KEYS.USERS_IN_CHANNEL(channelId));
 };

@@ -1,22 +1,18 @@
 import { useSnackBar } from '@/providers/SnackBarContext';
 import { useParams } from 'next/navigation';
 import { CHAT_TYPE } from '@/constants/chat';
-import { useMutationChatMessage, useMutationDeleteChatMessage } from '../../../../chats/_hook/useChatMutation';
 import { useCallback } from 'react';
 import useChatContextMenuStore from '@/store/chatContextMenuStore';
+import { useCreateMessage, useDeleteMessage } from '@/hooks/queries/useChat';
 
 export const useChatContextMenu = () => {
   const { id } = useParams();
   const { menu, closeMenu } = useChatContextMenuStore();
   const { openSnackBar } = useSnackBar();
 
-  const { mutate: mutateChatMessage } = useMutationChatMessage({
-    channel_id: Number(id)
-  });
+  const { mutate: mutateChatMessage } = useCreateMessage(Number(id));
 
-  const { mutateAsync: mutateDeleteChatMessage } = useMutationDeleteChatMessage({
-    channel_id: Number(id)
-  });
+  const { mutateAsync: mutateDeleteChatMessage } = useDeleteMessage(Number(id));
 
   const deleteChat = useCallback(async () => {
     if (!menu.id) return;

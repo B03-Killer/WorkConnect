@@ -1,12 +1,9 @@
 import { GetChatMessageType } from '@/types/chat';
 import { RealtimeSubscribeProps } from '@/utils/createRealtimeChannel';
 import { useCallback, useState } from 'react';
-import { useMutationUpdateChannelActiveAt } from '../../../_hook/useChatMutation';
-import {
-  useInvalidateChatMessages,
-  useInvalidateLatestNotice,
-  useInvalidateUsersInChannel
-} from '../../../_hook/useChatQuery';
+
+import { useInvalidateChatMessages, useInvalidateLatestNotice, useUpdateActiveAt } from '@/hooks/queries/useChat';
+import { useInvalidateUsersInChannel } from '@/hooks/queries/useChannels';
 
 type RealtimePayloadMessagesType = GetChatMessageType & {
   channel_id: string;
@@ -25,10 +22,10 @@ type HandleChatUpdatesProps = {
 };
 
 export const useChatHandlers = () => {
-  const { invalidate: invalidateUsersInChannel } = useInvalidateUsersInChannel();
-  const { invalidate: invalidateChatMessages } = useInvalidateChatMessages();
-  const { invalidate: invalidateLatestNotice } = useInvalidateLatestNotice();
-  const { mutateAsync: updateChannelActiveAt } = useMutationUpdateChannelActiveAt();
+  const invalidateUsersInChannel = useInvalidateUsersInChannel();
+  const invalidateChatMessages = useInvalidateChatMessages();
+  const invalidateLatestNotice = useInvalidateLatestNotice();
+  const { mutateAsync: updateChannelActiveAt } = useUpdateActiveAt();
   const [payloadMessages, setPayloadMessages] = useState<RealtimePayloadMessagesType[]>([]);
 
   const handleMessagesUpdates = useCallback(({ channelId }: HandleChatUpdatesProps) => {

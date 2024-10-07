@@ -1,5 +1,5 @@
 import api from '@/api';
-import { createQueryOptions } from './common';
+import { createQueryOptions, createQueryInvalidate } from './common';
 import { CHAT_QUERY_KEYS } from '@/constants/queryKeys';
 import { QueryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { CreateChatMessageProps, GetChatMessagesResponse, GetChatMessageType } from '@/types/chat';
@@ -22,7 +22,7 @@ const OPTIONS = {
 
 const MUTATIONS = {
   createMessage: (channelId: number) => ({
-    mutationFn: ({ content, type }: CreateChatMessageProps) => {
+    mutationFn: ({ content, type }: Omit<CreateChatMessageProps, 'channel_id'>) => {
       return api.chat.createChatMessage({
         channel_id: channelId,
         content,
@@ -67,4 +67,10 @@ export const useUploadFile = (options: QueryOptions) => {
 };
 export const useUpdateActiveAt = () => {
   return useMutation(MUTATIONS.updateActiveAt());
+};
+export const useInvalidateLatestNotice = () => {
+  return (channelId: number) => createQueryInvalidate(CHAT_QUERY_KEYS.LATEST_NOTICE(channelId));
+};
+export const useInvalidateChatMessages = () => {
+  return (channelId: number) => createQueryInvalidate(CHAT_QUERY_KEYS.CHAT_MESSAGES(channelId));
 };
