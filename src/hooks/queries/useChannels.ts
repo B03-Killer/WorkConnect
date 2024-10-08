@@ -11,10 +11,10 @@ const QUERY_OPTIONS = {
       fn: () => api.channel.getUsersInChannel(channelId)
     }),
   getInfo: (id: number) =>
-    createQueryOptions<any>({
+    createQueryOptions<{ name: string; channel_thumbnail: string }[]>({
       key: CHANNEL_QUERY_KEYS.CHANNEL_INFO(id),
       fn: () => api.channel.getChannelInfo(id),
-      select: (data) => data[0]
+      select: (data) => data[0] as unknown as { name: string; channel_thumbnail: string }[]
     }),
   getDocuments: (channelId: number) =>
     createQueryOptions<any>({

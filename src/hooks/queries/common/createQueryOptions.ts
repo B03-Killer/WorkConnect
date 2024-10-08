@@ -1,4 +1,3 @@
-import { QueryData } from '@supabase/supabase-js';
 import { type QueryFunction, type QueryKey, queryOptions, UseQueryOptions } from '@tanstack/react-query';
 
 type CreateQueryOptions<T> = {
